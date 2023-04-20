@@ -2,7 +2,9 @@
 
 ### Установка зависимостей
 ```
-pip install -r requirements.txt
+poetry shell 
+poetry install
+.venv/Scripts/activate 
 ```
 
 ### Запуск сервера
