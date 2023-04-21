@@ -1,10 +1,11 @@
 import numpy as np
 import random
+import datetime
 from scipy.optimize import curve_fit
 import matplotlib.pyplot as plt
 
 # количество объектов
-tracks_amount = 10
+tracks_amount = 15
 # на сколько пикселей рамка объектов может ложно смещаться (эмуляция не идеальной детекции)
 random_range = 10
 # с какой вероятностью объект на фрейме может быть не найдет детектором
@@ -16,6 +17,7 @@ tracks = []
 i = 0
 cb_width = 120
 cb_height = 100
+
 
 def get_point_on_random_side(width, height):
     side = random.randint(0, 4)
@@ -33,11 +35,14 @@ def get_point_on_random_side(width, height):
         y = random.randint(0, height)
     return x, y
 
+
 def fun(x, a, b, c, d):
     return a * x + b * x ** 2 + c * x ** 3 + d
 
+
 def objective(x, a, b, c, d, e, f):
     return (a * x) + (b * x ** 2) + (c * x ** 3) + (d * x ** 4) + (e * x ** 5) + f
+
 
 def check_track(track):
     if all(el['x'] == track[0]['x'] for el in track):
@@ -48,9 +53,11 @@ def check_track(track):
         return False
     if not all(el['y'] >= 0 and el['y'] <= height for el in track):
         return False
-    if (2 > track[0]['x'] > (width - 2) and 2 > track[0]['y'] > (width - 2)) or (2 > track[-1]['x'] > (width - 2) and 2 > track[-1]['y'] > (width - 2)):
+    if (2 > track[0]['x'] > (width - 2) and 2 > track[0]['y'] > (width - 2)) or (
+            2 > track[-1]['x'] > (width - 2) and 2 > track[-1]['y'] > (width - 2)):
         return False
     return True
+
 
 def add_track_to_tracks(track, tracks, id):
     for i, p in enumerate(track):
@@ -59,23 +66,24 @@ def add_track_to_tracks(track, tracks, id):
             bounding_box = []
         else:
             bounding_box = [
-                              p['x'] - int(cb_width/2) + random.randint(-random_range, random_range),
-                              p['y'] - cb_height + random.randint(-random_range, random_range),
-                              p['x'] + int(cb_width/2) + random.randint(-random_range, random_range),
-                              p['y'] + random.randint(-random_range, random_range)
-                            ]
+                p['x'] - int(cb_width / 2) + random.randint(-random_range, random_range),
+                p['y'] - cb_height + random.randint(-random_range, random_range),
+                p['x'] + int(cb_width / 2) + random.randint(-random_range, random_range),
+                p['y'] + random.randint(-random_range, random_range)
+            ]
         if i < len(tracks):
             tracks[i]['data'].append({'cb_id': id, 'bounding_box': bounding_box,
                                       'x': p['x'], 'y': p['y'], 'track_id': None})
         else:
             tracks.append(
                 {
-                    'frame_id': len(tracks)+1,
+                    'frame_id': len(tracks) + 1,
                     'data': [{'cb_id': id, 'bounding_box': bounding_box,
                               'x': p['x'], 'y': p['y'], 'track_id': None}]
                 }
             )
     return tracks
+
 
 while i < tracks_amount:
     x, y = np.array([]), np.array([])
@@ -104,3 +112,11 @@ plt.show()
 
 print(f'country_balls_amount = {tracks_amount}')
 print(f'track_data = {tracks}')
+
+
+# Save value tracks_amount and tracks in file
+# file's name = track_{date_now}.py
+date_now = datetime.datetime.now().strftime("%d_%m_%H_%M")
+with open(f'track_{date_now}.py', 'w') as f:
+    f.write(f"tracks_amount = {tracks_amount}\n")
+    f.write(f"track_data = {tracks}\n")
