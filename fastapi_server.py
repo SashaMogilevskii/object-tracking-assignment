@@ -1,12 +1,18 @@
 from fastapi import FastAPI, WebSocket
-from track_3 import track_data, country_balls_amount
 import asyncio
 import glob
+
+from track_22_04_22_46 import track_data, country_balls_amount
+
+from models import EasyModel
 
 app = FastAPI(title='Tracker assignment')
 imgs = glob.glob('imgs/*')
 country_balls = [{'cb_id': x, 'img': imgs[x % len(imgs)]} for x in range(country_balls_amount)]
 print('Started')
+
+# Инициализирую свою первую модель для tracker_soft()
+easy_model = EasyModel()
 
 
 def tracker_soft(el):
@@ -24,7 +30,9 @@ def tracker_soft(el):
     вашего трекера, использовать его в алгоритме трекера запрещено
     - запрещается присваивать один и тот же track_id разным объектам на одном фрейме
     """
-    return el
+    answer = easy_model.predict(el)
+    print([i['track_id'] for i in answer['data']])
+    return answer
 
 
 def tracker_strong(el):

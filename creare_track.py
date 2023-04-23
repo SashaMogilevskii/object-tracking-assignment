@@ -9,7 +9,7 @@ tracks_amount = 15
 # на сколько пикселей рамка объектов может ложно смещаться (эмуляция не идеальной детекции)
 random_range = 10
 # с какой вероятностью объект на фрейме может быть не найдет детектором
-bb_skip_percent = .25
+bb_skip_percent = .2
 
 width = 1000
 height = 800
@@ -118,5 +118,5 @@ print(f'track_data = {tracks}')
 # file's name = track_{date_now}.py
 date_now = datetime.datetime.now().strftime("%d_%m_%H_%M")
 with open(f'track_{date_now}.py', 'w') as f:
-    f.write(f"tracks_amount = {tracks_amount}\n")
+    f.write(f"country_balls_amount = {tracks_amount}\n")
     f.write(f"track_data = {tracks}\n")
