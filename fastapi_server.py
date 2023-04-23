@@ -31,7 +31,6 @@ def tracker_soft(el):
     - запрещается присваивать один и тот же track_id разным объектам на одном фрейме
     """
     answer = easy_model.predict(el)
-    print([i['track_id'] for i in answer['data']])
     return answer
 
 
