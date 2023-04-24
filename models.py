@@ -189,6 +189,8 @@ if __name__ == '__main__':
     from track_22_04_21_40 import track_data
 
     for el in track_data:
+        # print(el)
         predict_models = easy_model.predict(el)
-        print(*predict_models['data'], sep='\n')
-        print()
+        # print()
+        # print(*predict_models['data'], sep='\n')
+
